@@ -1,0 +1,16 @@
+/* -------------------------------------------------------- */
+/* frontend/styles/dashboard-theme.css                      */
+/* -------------------------------------------------------- */
+/* copied from shadcn theme.css – trimmed to essentials */
+body {
+  @apply overscroll-none bg-transparent;
+}
+
+:root {
+  --header-height: 4rem;
+}
+
+.theme-blue {
+  --primary: var(--color-blue-600);
+  --primary-foreground: var(--color-blue-50);
+}

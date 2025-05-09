@@ -1,0 +1,52 @@
+// Prisma schema for RateMe backend API
+// Defines Agent, Feedback, Invite, and Summary models
+// To generate/migrate, run: npx prisma migrate dev --name init
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Agent {
+  id            String     @id @default(cuid())
+  name          String
+  avatar        String?
+  avgRating     Float      @default(0)
+  responseCount Int        @default(0)
+  feedback      Feedback[]
+  invites       Invite[]
+  // One agent can have many summaries
+  summaries     Summary[]
+}
+
+model Feedback {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+  agent     Agent    @relation(fields: [agentId], references: [id])
+  agentId   String
+}
+
+model Invite {
+  id        String   @id @default(cuid())
+  recipient String
+  type      String // "SMS" | "Email"
+  sentAt    DateTime @default(now())
+  status    String // "Delivered" | "Failed" | etc.
+  agent     Agent    @relation(fields: [agentId], references: [id])
+  agentId   String
+}
+
+model Summary {
+  id             String  @id @default(cuid())
+  period         String
+  summary        String
+  sentimentScore Float
+  agent          Agent?  @relation(fields: [agentId], references: [id])
+  agentId        String?
+}
